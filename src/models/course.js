@@ -18,6 +18,10 @@ const schema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    tutorId: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Tutor'
+    }],
     studentId: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Student'

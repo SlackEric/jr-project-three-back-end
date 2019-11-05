@@ -18,7 +18,7 @@ async function addStudent(req, res) {
 async function getStudent(req, res) {
     const { id } = req.params;
   
-    const student = await Student.findById(id);
+    const student = await Student.findById(id).populate('courses', 'courseName');
     
     //error message not showing correctly if id is missing one digit
     if (!student) {
@@ -67,18 +67,17 @@ async function addCourse(req, res) {
     return res.status(404).json('student or course not found')
   }
 
-  student.course.addToSet(course._id);
-  course.student.addToSet(student._id);
+  student.courses.addToSet(course._id);
+  course.studentId.addToSet(student._id);
 
   await student.save();
   await course.save();
-  return res.json(studnet);
+  return res.json(student);
 }
 
 async function deleteCourse(req, res) {
   const {id, code} = req.params;
 
-  // need debug
   const student = await Student.findById(id);
   const course = await Course.findById(code);
 
@@ -86,8 +85,11 @@ async function deleteCourse(req, res) {
     return res.status(404).json('student or course not found')
   }
 
-  student.course.pull(course._id);
+  student.courses.pull(course._id);
+  course.studentId.pull(student._id);
   await student.save();
+  await course.save();
+  return res.json(student);
 }
 
 

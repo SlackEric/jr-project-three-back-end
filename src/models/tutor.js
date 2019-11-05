@@ -24,10 +24,18 @@ const schema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    title: {
+        type: String,
+        default: ''
+    },
     service:{
         type: String,
         default: ''
-    }
+    },
+    courses: [{
+        type: String,
+        ref: 'Course'
+    }]
 });
 
 const model = mongoose.model('Tutor', schema);
