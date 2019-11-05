@@ -1,9 +1,10 @@
 const Course = require('../models/course');
 
 async function addCourse(req, res) {
-    const { courseName, fee, description } = req.body;
+    const { courseName, code, fee, description } = req.body;
     const course = new Course({
         courseName,
+        code,
         fee,
         description
     });
@@ -13,9 +14,9 @@ async function addCourse(req, res) {
 }
 
 async function getCourse(req, res) {
-    const { id } = req.params;
+    const { id: code } = req.params;
   
-    const course = await Course.findById(id);
+    const course = await Course.findById(code);
     
     //error message not showing correctly if id is missing one digit
     if (!course) {

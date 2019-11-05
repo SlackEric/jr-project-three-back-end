@@ -1,12 +1,13 @@
 const Student = require('../models/student');
+const Course = require('../models/course');
 
 // back-end functions to manage students from database
 async function addStudent(req, res) {
-    const { firstName, lastName, email } = req.body;
+    const { firstName, lastName, email, password } = req.body;
     const student = new Student({
         firstName,
         lastName,
-        email,
+        email, 
         password
     });
 
@@ -56,11 +57,46 @@ async function deleteStudent(req, res) {
     return res.sendStatus(200);
   }
 
+// Create many to many relation between student and course
+async function addCourse(req, res) {
+  const { id, code } = req.params;
+  const student = await Student.findById(id);
+  const course = await Course.findById(code);
+
+  if (!student || !course) {
+    return res.status(404).json('student or course not found')
+  }
+
+  student.course.addToSet(course._id);
+  course.student.addToSet(student._id);
+
+  await student.save();
+  await course.save();
+  return res.json(studnet);
+}
+
+async function deleteCourse(req, res) {
+  const {id, code} = req.params;
+
+  // need debug
+  const student = await Student.findById(id);
+  const course = await Course.findById(code);
+
+  if (!student || !course) {
+    return res.status(404).json('student or course not found')
+  }
+
+  student.course.pull(course._id);
+  await student.save();
+}
+
 
 module.exports = {
     addStudent,
     getAllStudent,
     getStudent,
     updateStudent,
-    deleteStudent
+    deleteStudent,
+    addCourse,
+    deleteCourse
 }

@@ -1,7 +1,7 @@
 const Tutor = require('../models/tutor');
 
 async function addTutor(req,res) {
-    const { firstName, lastName, email, service } = req.body;
+    const { firstName, lastName, email, password,service } = req.body;
     const tutor = new Tutor({
         firstName,
         lastName,
