@@ -1,9 +1,14 @@
 {
+<<<<<<< HEAD
   "name": "jr-project-3-backend",
+=======
+  "name": "jr-project-three-back-end",
+>>>>>>> 7fddddda0d05429206ba3071c7057e17e5a01718
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "dev": "nodemon src/index.js"
   },
   "author": "",
@@ -21,5 +26,22 @@
   },
   "devDependencies": {
     "nodemon": "^1.19.4"
+=======
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SlackEric/jr-project-three-back-end.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SlackEric/jr-project-three-back-end/issues"
+  },
+  "homepage": "https://github.com/SlackEric/jr-project-three-back-end#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+>>>>>>> 7fddddda0d05429206ba3071c7057e17e5a01718
   }
 }
