@@ -1,18 +1,28 @@
+const User = require('../models/user');
 const Tutor = require('../models/tutor');
 const Course = require('../models/course');
 
 async function addTutor(req, res) {
-    const { firstName, lastName, email, password, service } = req.body;
+    const { firstName, lastName, email, password, title, service } = req.body;
     const tutor = new Tutor({
         firstName,
         lastName,
         email,
-        password,
         title,
         service
     });
 
     await tutor.save();
+
+    const role = 'tutor';
+    const user = new User({
+        email,
+        password,
+        role
+    });
+    await user.hashPassword();
+    await user.save();
+
     return res.json(tutor);
 }
 

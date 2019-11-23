@@ -1,10 +1,15 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const Joi = require('@hapi/joi');
 
 const schema = new mongoose.Schema({
-    username:{
+    email:{
         type: String,
         required: true,
+        validate: {
+            validator: email => !Joi.string().email().validate(email).error,
+            msg: 'Invalid email format'
+        }
     },
     password: {
         type: String,
