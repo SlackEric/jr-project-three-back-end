@@ -15,7 +15,7 @@ async function loginUser (req, res) {
     if (!validPassword) {
         return res.status(401).json('Invalid email or password');
     }
-    console.log(existingUser);
+
     const token = generateToken(existingUser._id);
     return res.json({ email, token });
 }
