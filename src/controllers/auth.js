@@ -1,23 +1,25 @@
-const Admin = require('../models/admin');
+const User = require('../models/user');
 const { generateToken } = require('../utils/jwt');
 
-function adminLogin (req, res) {
-    const { userName, password } = req.body;
+async function loginUser (req, res) {
+    const { email, password } = req.body;
 
-    const admin = Admin.findOne({ userName }).exec();
-    if (!admin) {
-        return res.status(401).json('Invalid username or password');
+    const existingUser = await User.findOne({ email }).exec();
+
+    if (!existingUser) {
+        return res.status(401).json('Invalid email or password');
     }
 
-    const validPassword = admin.validPassword(password);
-    if (!admin) {
-        return res.status(401).json('Invalid username or password');
+    const validPassword = await existingUser.validatePassword(password);
+
+    if (!validPassword) {
+        return res.status(401).json('Invalid email or password');
     }
 
-    const token = generateToken(admin._id);
-    return res.json({ userName, token });
+    const token = generateToken(existingUser._id);
+    return res.json({ email, token });
 }
 
 module.exports = {
-    adminLogin
+    loginUser,
 };

@@ -20,10 +20,6 @@ const schema = new mongoose.Schema({
             msg: 'Invalid email format'
         }
     },
-    password: {
-        type: String,
-        required: true,
-    },
     title: {
         type: String,
         default: ''

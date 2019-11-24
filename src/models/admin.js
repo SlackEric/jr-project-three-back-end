@@ -1,16 +1,18 @@
 const mongoose = require('mongoose');
+const Joi = require('@hapi/joi');
 
 const schema = new mongoose.Schema({
-    userName:{
+    email: {
         type: String,
         required: true,
-    },
-    password: {
-        type: String,
-        require: true
+        validate: {
+            validator: email => !Joi.string().email().validate(email).error,
+            msg: 'Invalid email format'
+        }
     }
+
 });
 
-const model = mongoose.model('User', schema);
+const model = mongoose.model('Admin', schema);
 
 module.exports = model;

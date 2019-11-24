@@ -20,16 +20,12 @@ const schema = new mongoose.Schema({
             msg: 'Invalid email format'
         }
     },
-    password: {
-        type: String,
-        required: true
-    },
     courses: [{
         type: String,
         ref: 'Course'
     }]
 });
 
-const model = mongoose.model('Stduent', schema);
+const model = mongoose.model('Student', schema);
 
 module.exports = model;

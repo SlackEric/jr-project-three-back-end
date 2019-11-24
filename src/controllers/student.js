@@ -1,3 +1,4 @@
+const User = require('../models/user');
 const Student = require('../models/student');
 const Course = require('../models/course');
 
@@ -7,11 +8,21 @@ async function addStudent(req, res) {
     const student = new Student({
         firstName,
         lastName,
-        email, 
-        password
+        email
     });
 
     await student.save();
+
+    const role = 'student';
+    const user = new User({
+        email,
+        password,
+        role
+    });
+   
+    await user.hashPassword();
+    await user.save();
+
     return res.json(student);
 }
 
