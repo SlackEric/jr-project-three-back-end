@@ -5,7 +5,7 @@ exports.connectToDB = () => {
   // mongoose.set('debug', true);
   let connectionString;
   if (DB_USER && DB_PASSWORD) {
-    connectionString = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_DATABASE}`
+    connectionString = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}`
   } else{
     connectionString = `mongodb://${DB_HOST}:${DB_PORT}/${DB_DATABASE}`;
   }
