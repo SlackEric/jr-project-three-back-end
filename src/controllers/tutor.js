@@ -57,7 +57,7 @@ async function updateTutor(req, res) {
 
     const { password } = req.body;
 
-    const newUser = await User.findOneAndUpdate(email, { password }, { new: true })
+    const newUser = await User.findOneAndUpdate({email}, { password }, { new: true })
 
     await newUser.hashPassword();
     await newUser.save()
@@ -72,7 +72,7 @@ async function deleteTutor(req, res) {
         return res.status(404).json('Tutor not found');
     }
 
-    const email = tutor.email;
+    const { email } = tutor.email;
     const user = await User.findOneAndDelete(email);
     if (!user) {
         return res.status(404).json('Tutor not found');
