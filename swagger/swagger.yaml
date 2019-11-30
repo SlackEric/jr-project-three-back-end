@@ -1,0 +1,314 @@
+swagger: '2.0'
+info:
+  description: >-
+    This is a sample server Petstore server.  You can find out more about    
+    Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net,
+    #swagger](http://swagger.io/irc/).      For this sample, you can use the api
+    key `special-key` to test the authorization     filters.
+  version: 1.0.0
+  title: ZERK LMS
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: yulin.ye.au@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: localhost:4000/api
+basePath: /v1
+tags:
+tags:
+  - name: auth
+    description: Operations about auth
+  - name: admin
+    description: Operations about admin
+  - name: users
+    description: Operations about login user
+  - name: students
+    description: Operations about student
+  - name: tutors
+    description: Operations about tutor
+  - name: courses
+    description: Operations about course
+schemes:
+  - https
+  - http
+paths:
+  /admin:
+    post:
+      tags:
+        - admin
+      summary: Add a new admin
+      description: ''
+      operationId: addAdmin
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Admin object that needs to be added
+          required: true
+          schema:
+            $ref: '#/definitions/Admin'
+      responses:
+        200:
+          description: 'Admin created'        
+        400:
+          description: 'Bad request'
+  
+  /users:
+    post:
+      tags:
+        - users
+      summary: Add a new user
+      description: ''
+      operationId: addUser
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: User object that needs to be added
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: User created
+        400:
+          description: Bad request
+  /students:
+    post:
+      tags:
+        - students
+      summary: Add a new student
+      description: ''
+      operationId: addStudent
+      consumes:
+        - application/json
+      produces:
+        - application/json      
+      parameters:
+        - in: body
+          name: body
+          description: Student object that needs to be added
+          required: true
+          schema:
+            $ref: '#/definitions/Student'
+      responses:
+        200:
+          description: Student created
+        400:
+          description: Bad request
+    get:
+      tags:
+        - students
+      summary: Get all students
+      description: ''
+      operationId: getAllStudents
+      consumes:
+        - application/json
+      produces:
+        - application/json    
+      responses:
+        200:
+          description: All students are returned
+        400:
+          description: Bad request
+
+  /students/{studentId}:        
+    get:
+      tags:
+        - students
+      summary: Get a student
+      description: ''
+      operationId: getStudent
+      parameters:
+        - name: studentId
+          in: path
+          description: student id
+          required: true
+          schema:
+            type: string      
+      responses:
+        200:
+          description: Get a student successfully
+          schema:
+            $ref: '#/definitions/Student'
+        400:
+          description: Bad request
+        404:
+          description: Student not found
+    put:
+      tags:
+        - students
+      summary: Update a student
+      description: ''
+      operationId: updateStudent
+      parameters:
+        - name: studentId
+          in: path
+          description: student id
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: body
+          description: Student object that needs to be updated
+          required: true
+          schema:
+            $ref: '#/definitions/Student'
+      responses:
+        200:
+          description: Student updated
+        400:
+          description: Bad request
+        404:
+          description: Student not found
+    delete:
+      tags:
+        - students
+      summary: Delete a student
+      description: ''
+      operationId: deleteStudent
+      parameters:
+        - name: studentId
+          in: path
+          description: student id
+          required: true
+          schema:
+            type: string      
+      responses:
+        200:
+          description: Student deleted
+        400:
+          description: Bad request
+        404:
+          description: Student not found
+  /students/{studentId}/courses/{code}:
+    post:
+      tags: 
+        - students
+      summary: Add a course for a student
+      description: ''
+      operationId: addCourse
+      parameters:
+        - name: studentId
+          in: path
+          description: student id
+          required: true
+          schema:
+            type: string
+        - name: code
+          in: path
+          description: course code
+          required: true
+          schema:
+            type: string
+        - name: body
+          in: body
+          description: Course object to be added
+          required: true
+          schema:
+            $ref: '#/definitions/Course'
+      responses:
+        200:
+          description: The course is associated with the student
+        400:
+          description: Bad request
+        404:
+          description: Student not found          
+securityDefinitions:
+  petstore_auth:
+    type: oauth2
+    authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
+    flow: implicit
+    scopes:
+      'write:pets': modify pets in your account
+      'read:pets': read your pets
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+definitions:
+  Admin: 
+    type: object
+    properties:
+      email: 
+        type: string
+      password:
+        type: string
+  User:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      role:
+        type: string 
+  Student:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+  Tutor:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      title:
+        type: string
+      service:
+        type: string
+  Course:
+    type: object
+    properties:
+      code:
+        type: string      
+      courseName:
+        type: string
+      fee:
+        type: number
+      description:
+        type: string
+      tutorId:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/Tutor'
+      studentId:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/Student'        
+  ApiResponse:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      type:
+        type: string
+      message:
+        type: string
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
