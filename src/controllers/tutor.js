@@ -45,7 +45,7 @@ async function getTutor(req, res) {
 
 async function updateTutor(req, res) {
     const { id } = req.params;
-    const { firstName, lastName, service } = req.body;
+    const { firstName, lastName, email, service } = req.body;
     const newTutor = await Tutor.findByIdAndUpdate(id,
         { firstName, lastName, service },
         { new: true }

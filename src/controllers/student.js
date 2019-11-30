@@ -46,7 +46,7 @@ async function getAllStudent(req, res) {
 // Not sure if the password information should be update here
 async function updateStudent(req, res) {
   const { id } = req.params;
-  const { firstName, lastName } = req.body;
+  const { firstName, lastName, email } = req.body;
   const newStudent = await Student.findByIdAndUpdate(id,
       { firstName, lastName },
       { new: true }
