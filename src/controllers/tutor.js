@@ -72,8 +72,8 @@ async function deleteTutor(req, res) {
         return res.status(404).json('Tutor not found');
     }
 
-    const { email } = tutor.email;
-    const user = await User.findOneAndDelete(email);
+    const email = tutor.email;
+    const user = await User.findOneAndDelete({email});
     if (!user) {
         return res.status(404).json('Tutor not found');
     }
