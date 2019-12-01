@@ -47,13 +47,20 @@ async function updateTutor(req, res) {
     const { id } = req.params;
     const { firstName, lastName, email, service } = req.body;
     const newTutor = await Tutor.findByIdAndUpdate(id,
-        { firstName, lastName, email, password, service },
+        { firstName, lastName, service },
         { new: true }
     );
 
     if (!newTutor) {
         return res.status(404).json('Tutor not found');
     }
+
+    const { password } = req.body;
+
+    const newUser = await User.findOneAndUpdate({email}, { password }, { new: true })
+
+    await newUser.hashPassword();
+    await newUser.save()
 
     return res.json(newTutor);
 }
@@ -62,6 +69,12 @@ async function deleteTutor(req, res) {
     const { id } = req.params;
     const tutor = await Tutor.findByIdAndDelete(id);
     if (!tutor) {
+        return res.status(404).json('Tutor not found');
+    }
+
+    const email = tutor.email;
+    const user = await User.findOneAndDelete({email});
+    if (!user) {
         return res.status(404).json('Tutor not found');
     }
     return res.sendStatus(200);

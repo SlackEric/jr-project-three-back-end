@@ -45,18 +45,25 @@ async function getAllStudent(req, res) {
 
 // Not sure if the password information should be update here
 async function updateStudent(req, res) {
-    const { id } = req.params;
-    const { firstName, lastName, email } = req.body;
-    const newStudent = await Student.findByIdAndUpdate(id,
-        { firstName, lastName, email, password },
-        { new: true }
-    );
+  const { id } = req.params;
+  const { firstName, lastName, email } = req.body;
+  const newStudent = await Student.findByIdAndUpdate(id,
+      { firstName, lastName },
+      { new: true }
+  );
 
-    if (!newStudent) {
-        return res.status(404).json('Student not found');
-    }
+  if (!newStudent) {
+      return res.status(404).json('Student not found');
+  }
 
-    return res.json(newStudent);
+  const { password } = req.body;
+  console.log(email);
+  const newUser = await User.findOneAndUpdate({email}, { password }, { new: true })
+
+  await newUser.hashPassword();
+  await newUser.save()
+
+  return res.json(newStudent);
 }
 
 async function deleteStudent(req, res) {
@@ -65,6 +72,14 @@ async function deleteStudent(req, res) {
     if (!student) {
       return res.status(404).json('student not found');
     }
+
+    const email = student.email;
+
+    const user = await User.findOneAndDelete({email});
+    if (!user) {
+      return res.status(404).json('student not found');
+    }
+
     return res.sendStatus(200);
   }
 
