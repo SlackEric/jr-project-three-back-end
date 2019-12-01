@@ -1,10 +1,7 @@
 swagger: '2.0'
 info:
   description: >-
-    This is a sample server Petstore server.  You can find out more about    
-    Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net,
-    #swagger](http://swagger.io/irc/).      For this sample, you can use the api
-    key `special-key` to test the authorization     filters.
+    This is the API documentation ZERK of online learning system
   version: 1.0.0
   title: ZERK LMS
   termsOfService: 'http://swagger.io/terms/'
@@ -13,21 +10,21 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-host: localhost:4000/api
-basePath: /v1
+host: https://jr-project-three-back-end.herokuapp.com
+basePath: /api/v1
 tags:
 tags:
   - name: auth
     description: Operations about auth
   - name: admin
     description: Operations about admin
-  - name: users
+  - name: user
     description: Operations about login user
-  - name: students
+  - name: student
     description: Operations about student
-  - name: tutors
+  - name: tutor
     description: Operations about tutor
-  - name: courses
+  - name: course
     description: Operations about course
 schemes:
   - https
@@ -42,9 +39,7 @@ paths:
       operationId: addAdmin
       consumes:
         - application/json
-        - application/xml
       produces:
-        - application/xml
         - application/json
       parameters:
         - in: body
@@ -55,37 +50,13 @@ paths:
             $ref: '#/definitions/Admin'
       responses:
         200:
-          description: 'Admin created'        
-        400:
-          description: 'Bad request'
-  
-  /users:
-    post:
-      tags:
-        - users
-      summary: Add a new user
-      description: ''
-      operationId: addUser
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: User object that needs to be added
-          required: true
-          schema:
-            $ref: '#/definitions/User'
-      responses:
-        200:
-          description: User created
+          description: Successfully add an admin       
         400:
           description: Bad request
   /students:
     post:
       tags:
-        - students
+        - student
       summary: Add a new student
       description: ''
       operationId: addStudent
@@ -99,15 +70,17 @@ paths:
           description: Student object that needs to be added
           required: true
           schema:
-            $ref: '#/definitions/Student'
+            $ref: '#/definitions/StudentUser'
       responses:
         200:
-          description: Student created
+          description: Successfully add a student
+          schema:
+            $ref: '#/definitions/StudentRole'
         400:
           description: Bad request
     get:
       tags:
-        - students
+        - student
       summary: Get all students
       description: ''
       operationId: getAllStudents
@@ -117,17 +90,24 @@ paths:
         - application/json    
       responses:
         200:
-          description: All students are returned
+          description: Successfully get all students
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/StudentRole'       
         400:
           description: Bad request
-
   /students/{studentId}:        
     get:
       tags:
-        - students
-      summary: Get a student
+        - student
+      summary: Get a student by Id
       description: ''
       operationId: getStudent
+      consumes:
+        - application/json
+      produces:
+        - application/json
       parameters:
         - name: studentId
           in: path
@@ -137,23 +117,27 @@ paths:
             type: string      
       responses:
         200:
-          description: Get a student successfully
+          description: Successfully get a student
           schema:
-            $ref: '#/definitions/Student'
+            $ref: '#/definitions/StudentRole'
         400:
           description: Bad request
         404:
           description: Student not found
     put:
       tags:
-        - students
-      summary: Update a student
+        - student
+      summary: Update a student by Id
       description: ''
       operationId: updateStudent
+      consumes:
+        - application/json
+      produces:
+        - application/json
       parameters:
         - name: studentId
           in: path
-          description: student id
+          description: student Id
           required: true
           schema:
             type: string
@@ -162,18 +146,20 @@ paths:
           description: Student object that needs to be updated
           required: true
           schema:
-            $ref: '#/definitions/Student'
+            $ref: '#/definitions/StudentRole'
       responses:
         200:
-          description: Student updated
+          description: Successfully update a student
+          schema:
+            $ref: '#/definitions/StudentRole'
         400:
           description: Bad request
         404:
           description: Student not found
     delete:
       tags:
-        - students
-      summary: Delete a student
+        - student
+      summary: Delete a student by Id
       description: ''
       operationId: deleteStudent
       parameters:
@@ -185,7 +171,7 @@ paths:
             type: string      
       responses:
         200:
-          description: Student deleted
+          description:  Successfully delete a student
         400:
           description: Bad request
         404:
@@ -193,10 +179,42 @@ paths:
   /students/{studentId}/courses/{code}:
     post:
       tags: 
-        - students
-      summary: Add a course for a student
+        - student
+      summary: Add a course to a student
       description: ''
       operationId: addCourse
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: studentId
+          in: path
+          description: student Id
+          required: true
+          schema:
+            type: string
+        - name: code
+          in: path
+          description: course code
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: The course is associated with the student
+          schema:
+              $ref: '#/definitions/StudentRole'
+        400:
+          description: Bad request
+        404:
+          description: Student or course not found 
+    delete:
+      tags:
+        - student
+      summary: Delete a course from a student
+      description: ''
+      operationId: deleteCourse
       parameters:
         - name: studentId
           in: path
@@ -210,27 +228,305 @@ paths:
           required: true
           schema:
             type: string
-        - name: body
-          in: body
-          description: Course object to be added
-          required: true
-          schema:
-            $ref: '#/definitions/Course'
       responses:
         200:
-          description: The course is associated with the student
+          description: The course is removed from the student
+          schema:
+            $ref: '#/definitions/StudentRole'
         400:
           description: Bad request
         404:
-          description: Student not found          
+          description: Student or course not found
+  /tutors:
+    post:
+      tags: 
+        - tutor
+      summary: Add a new tutor
+      description: ''
+      operationId: addTutor
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: Tutor object to be added
+          required: true
+          schema:
+            $ref: '#/definitions/TutorUser'
+      responses:
+        200:
+          description: Tutor created
+          schema:
+            $ref: '#/definitions/TutorRole'      
+        400:
+          description: Bad request 
+    get:
+      tags:
+        - tutor
+      summary: Get all tutors
+      desciption: ''
+      operationId: getAllTutor
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successfully get all tutors
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TutorRole'
+        400:
+          description: Bad request 
+  /tutors/{tutorId}:
+    get:
+      tags: 
+        - tutor
+      summary: Get a tutor by Id
+      description: ''
+      operationId: getTutor
+      consumes:
+        - application/json
+      produces:
+        - application/json      
+      parameters:
+        - name: tutorId
+          in: path
+          description: student Id
+          required: true
+          schema:
+            $ref: string
+      responses:
+        200:
+          description: Successfully get a tutor
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TutorRole'
+        400:
+          description: Bad request 
+        404:
+          description: Tutor not found
+    put:
+      tags: 
+        - tutor
+      summary: Update a tutor by Id
+      description: ''
+      operationId: updateTutor
+      consumes:
+        - application/json
+      produces:
+        - application/json      
+      parameters:
+        - name: tutorId
+          in: path
+          description: tutor Id
+          required: true
+          schema:
+            $ref: '#/definitions/TutorRole'
+      responses:
+        200:
+          description: Successfully update a tutor
+          schema:
+            $ref: '#/definitions/TutorRole'          
+        400:
+          description: Bad request 
+        404:
+          description: Tutor not found  
+    delete:
+      tags:
+        - tutor
+      summary: Delete a tutor by Id
+      description: ''
+      operationId: deleteTutor
+      parameters:
+        - name: tutorId
+          in: path
+          description: tutor Id
+          required: true
+          schema:
+            $ref: string
+      responses:
+        200:
+          description: Successfully delete a tutor
+        400:
+          description: Bad request 
+        404:
+          description: Tutor not found
+  /tutors/{tutorId}/courses/{code}:
+    post:
+      tags:
+        - tutor
+      summary: Add a course to a tutor
+      description: ''
+      operationId: addCourse
+      parameters:
+        - name: tutorId
+          in: path
+          description: tutor Id
+          required: true
+          schema:
+            $ref: string
+        - name: code
+          in: path
+          description: course code
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: The course is associated with the tutor
+          schema:
+            $ref: '#/definitions/TutorRole'
+        400:
+          description: Bad request
+        404:
+          description: Tutor or course not found
+    delete:
+      tags:
+        - tutor
+      summary: Delete a course from a tutor
+      description: ''
+      operationId: deleteCourse
+      parameters:
+        - name: tutorId
+          in: path
+          description: tutor Id
+          required: true
+          schema:
+            type: string
+        - name: code
+          in: path
+          description: course code
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: The course is associated with the tutor
+          schema:
+            $ref: '#/definitions/TutorRole'
+        400:
+          description: Bad request
+        404:
+          description: Tutor or course not found
+  /courses:
+    post:
+      tags:
+        - course
+      summary: Add a new course
+      description: ''
+      operationId: addCourse
+      consumes:
+        - application/json
+      produces:
+        - application/json      
+      parameters:
+         - name: body
+           in: body
+           description: Course object that needs to be added
+           required: true
+           schema:
+            $ref: '#/definitions/Course'
+      response:
+        200:
+          description: Successfully create a course
+          schema: 
+            $ref: '#/definitions/Course'
+        400:
+          description: Bad request
+    get:
+      tags:
+        - course
+      summary: get all courses
+      description: ''
+      operationId: getAllCourse
+      produces:
+        - application/json        
+      responses:
+        200:
+          description: Successfully get all courses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Course'
+        400:
+          description: Bad request
+  /courses/{code}:
+    get:
+      tags:
+        - course
+      summary: Get a course by code
+      description: ''
+      operationId: getAllCourse
+      consumes:
+        - application/json
+      produces:
+        - application/json      
+      parameters:
+        - name: code
+          in: path
+          description: course code
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully get a course
+          schema:
+            $ref: '#/definitions/Course'
+        400:
+          description: Bad request
+        404:
+          description: Course not found
+    update:
+      tags:
+        - course
+      summary: Update a course by code
+      description: ''
+      operationId: updateCourse
+      consumes:
+        - application/json
+      produces:
+        - application/json      
+      parameters:
+        - name: code
+          in: path
+          description: course code
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Course updated
+          schema:
+            $ref: '#/definitions/Course'
+        400:
+          description: Bad request
+        404:
+          description: Course not found
+    delete:
+      tags:
+        - course
+      summary: Delete a course by code
+      description: ''
+      operationId: deleteCourse
+      parameters:
+        - name: code
+          in: path
+          description: course code
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully delete a course
+        400:
+          description: Bad request
+        404:
+          description: Course not found
 securityDefinitions:
-  petstore_auth:
-    type: oauth2
-    authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
-    flow: implicit
-    scopes:
-      'write:pets': modify pets in your account
-      'read:pets': read your pets
   api_key:
     type: apiKey
     name: api_key
@@ -243,16 +539,7 @@ definitions:
         type: string
       password:
         type: string
-  User:
-    type: object
-    properties:
-      email:
-        type: string
-      password:
-        type: string
-      role:
-        type: string 
-  Student:
+  StudentUser:
     type: object
     properties:
       firstName:
@@ -263,7 +550,35 @@ definitions:
         type: string
       password:
         type: string
-  Tutor:
+  StudentRole:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      courses:
+          type: array
+          items:
+            $ref: '#/definitions/Course'
+  TutorUser:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      title:
+        type: string
+  TutorRole:
     type: object
     properties:
       firstName:
@@ -278,6 +593,10 @@ definitions:
         type: string
       service:
         type: string
+      courses:
+          type: array
+          items:
+            $ref: '#/definitions/Course'
   Course:
     type: object
     properties:
@@ -290,15 +609,13 @@ definitions:
       description:
         type: string
       tutorId:
-        type: array
-        items:
-          type: object
-          $ref: '#/definitions/Tutor'
+          type: array
+          items:
+            $ref: '#/definitions/TutorRole'
       studentId:
-        type: array
-        items:
-          type: object
-          $ref: '#/definitions/Student'        
+          type: array
+          items:
+            $ref: '#/definitions/StudentRole'        
   ApiResponse:
     type: object
     properties:
