@@ -30,6 +30,32 @@ schemes:
   - https
   - http
 paths:
+
+  /auth:
+    post:
+      tags:
+        - auth
+      summary: Authenticate a login user
+      description: ''
+      operationId: loginUser
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Credentials that needs to be authenticated
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: Successfully login
+          schema:
+            $ref: '#/definitions/Token'
+        400:
+          description: Bad request     
   /admin:
     post:
       tags:
@@ -70,12 +96,12 @@ paths:
           description: Student object that needs to be added
           required: true
           schema:
-            $ref: '#/definitions/StudentUser'
+            $ref: '#/definitions/Student'
       responses:
         200:
           description: Successfully add a student
           schema:
-            $ref: '#/definitions/StudentRole'
+            $ref: '#/definitions/Student'
         400:
           description: Bad request
     get:
@@ -94,7 +120,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/StudentRole'       
+              $ref: '#/definitions/Student'       
         400:
           description: Bad request
   /students/{studentId}:        
@@ -119,7 +145,7 @@ paths:
         200:
           description: Successfully get a student
           schema:
-            $ref: '#/definitions/StudentRole'
+            $ref: '#/definitions/Student'
         400:
           description: Bad request
         404:
@@ -146,12 +172,12 @@ paths:
           description: Student object that needs to be updated
           required: true
           schema:
-            $ref: '#/definitions/StudentRole'
+            $ref: '#/definitions/Student'
       responses:
         200:
           description: Successfully update a student
           schema:
-            $ref: '#/definitions/StudentRole'
+            $ref: '#/definitions/Student'
         400:
           description: Bad request
         404:
@@ -204,7 +230,7 @@ paths:
         200:
           description: The course is associated with the student
           schema:
-              $ref: '#/definitions/StudentRole'
+              $ref: '#/definitions/Student'
         400:
           description: Bad request
         404:
@@ -232,7 +258,7 @@ paths:
         200:
           description: The course is removed from the student
           schema:
-            $ref: '#/definitions/StudentRole'
+            $ref: '#/definitions/Student'
         400:
           description: Bad request
         404:
@@ -254,12 +280,12 @@ paths:
           description: Tutor object to be added
           required: true
           schema:
-            $ref: '#/definitions/TutorUser'
+            $ref: '#/definitions/Tutor'
       responses:
         200:
           description: Tutor created
           schema:
-            $ref: '#/definitions/TutorRole'      
+            $ref: '#/definitions/Tutor'      
         400:
           description: Bad request 
     get:
@@ -276,7 +302,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/TutorRole'
+              $ref: '#/definitions/Tutor'
         400:
           description: Bad request 
   /tutors/{tutorId}:
@@ -303,7 +329,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/TutorRole'
+              $ref: '#/definitions/Tutor'
         400:
           description: Bad request 
         404:
@@ -324,12 +350,12 @@ paths:
           description: tutor Id
           required: true
           schema:
-            $ref: '#/definitions/TutorRole'
+            $ref: '#/definitions/Tutor'
       responses:
         200:
           description: Successfully update a tutor
           schema:
-            $ref: '#/definitions/TutorRole'          
+            $ref: '#/definitions/Tutor'          
         400:
           description: Bad request 
         404:
@@ -378,7 +404,7 @@ paths:
         200:
           description: The course is associated with the tutor
           schema:
-            $ref: '#/definitions/TutorRole'
+            $ref: '#/definitions/Tutor'
         400:
           description: Bad request
         404:
@@ -406,7 +432,7 @@ paths:
         200:
           description: The course is associated with the tutor
           schema:
-            $ref: '#/definitions/TutorRole'
+            $ref: '#/definitions/Tutor'
         400:
           description: Bad request
         404:
@@ -532,6 +558,13 @@ securityDefinitions:
     name: api_key
     in: header
 definitions:
+  User:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
   Admin: 
     type: object
     properties:
@@ -539,18 +572,7 @@ definitions:
         type: string
       password:
         type: string
-  StudentUser:
-    type: object
-    properties:
-      firstName:
-        type: string
-      lastName:
-        type: string
-      email:
-        type: string
-      password:
-        type: string
-  StudentRole:
+  Student:
     type: object
     properties:
       firstName:
@@ -565,20 +587,7 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/Course'
-  TutorUser:
-    type: object
-    properties:
-      firstName:
-        type: string
-      lastName:
-        type: string
-      email:
-        type: string
-      password:
-        type: string
-      title:
-        type: string
-  TutorRole:
+  Tutor:
     type: object
     properties:
       firstName:
@@ -611,20 +620,17 @@ definitions:
       tutorId:
           type: array
           items:
-            $ref: '#/definitions/TutorRole'
+            $ref: '#/definitions/Tutor'
       studentId:
           type: array
           items:
-            $ref: '#/definitions/StudentRole'        
-  ApiResponse:
+            $ref: '#/definitions/Student'        
+  Token:
     type: object
     properties:
-      code:
-        type: integer
-        format: int32
-      type:
+      email:
         type: string
-      message:
+      token:
         type: string
 externalDocs:
   description: Find out more about Swagger
