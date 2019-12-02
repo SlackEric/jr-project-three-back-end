@@ -3,13 +3,15 @@ const Tutor = require('../models/tutor');
 const Course = require('../models/course');
 
 async function addTutor(req, res) {
-    const { firstName, lastName, email, password, title, service } = req.body;
+    const { firstName, lastName, email, password, dateOfBirth, gender, mobile, note } = req.body;
     const tutor = new Tutor({
         firstName,
         lastName,
         email,
-        title,
-        service
+        dateOfBirth,
+        gender,
+        mobile,
+        note
     });
 
     await tutor.save();
@@ -45,9 +47,9 @@ async function getTutor(req, res) {
 
 async function updateTutor(req, res) {
     const { id } = req.params;
-    const { firstName, lastName, email, service } = req.body;
+    const { firstName, lastName, email, dateOfBirth, gender, mobile, note } = req.body;
     const newTutor = await Tutor.findByIdAndUpdate(id,
-        { firstName, lastName, service },
+        { firstName, lastName, dateOfBirth, gender, mobile, note },
         { new: true }
     );
 

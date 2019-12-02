@@ -10,9 +10,9 @@ const schema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    fee: {
-        type: Number,
-        required: true,
+    coursePeriod: {
+        type: String,
+        required: true
     },
     description: {
         type: String,

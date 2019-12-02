@@ -1,11 +1,11 @@
 const Course = require('../models/course');
 
 async function addCourse(req, res) {
-    const { courseName, code, fee, description } = req.body;
+    const { courseName, code, coursePeriod, description } = req.body;
     const course = new Course({
         courseName,
         code,
-        fee,
+        coursePeriod,
         description
     });
 
@@ -32,9 +32,9 @@ async function getAllCourse(req, res) {
 
 async function updateCourse(req, res) {
     const { id } = req.params;
-    const { courseName, fee, description } = req.body;
+    const { courseName, code, coursePeriod, description} = req.body;
     const newCourse = await Course.findByIdAndUpdate(id,
-        { courseName, fee, description },
+        { courseName, code, coursePeriod, description },
         { new: true }
     );
 

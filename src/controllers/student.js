@@ -4,11 +4,15 @@ const Course = require('../models/course');
 
 // back-end functions to manage students from database
 async function addStudent(req, res) {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, dateOfBirth, gender, mobile, note } = req.body;
     const student = new Student({
         firstName,
         lastName,
-        email
+        email,
+        dateOfBirth,
+        gender,
+        mobile,
+        note
     });
 
     await student.save();
@@ -46,9 +50,9 @@ async function getAllStudent(req, res) {
 // Not sure if the password information should be update here
 async function updateStudent(req, res) {
   const { id } = req.params;
-  const { firstName, lastName, email } = req.body;
+  const { firstName, lastName, email, dateOfBirth, gender, mobile, note } = req.body;
   const newStudent = await Student.findByIdAndUpdate(id,
-      { firstName, lastName },
+      { firstName, lastName, dateOfBirth, gender, mobile, note },
       { new: true }
   );
 

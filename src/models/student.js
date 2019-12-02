@@ -21,6 +21,23 @@ const schema = new mongoose.Schema({
             msg: 'Invalid email format'
         }
     },
+    dateOfBirth: {
+        type: Date,
+        default: ''
+    },
+    // This one might need to be changed to option
+    gender: {
+        type: String,
+        default: ''
+    },
+    mobile: {
+        type: String,
+        default: '',
+    },
+    note: {
+        type: String,
+        default: ''
+    },
     courses: [{
         type: String,
         ref: 'Course'
