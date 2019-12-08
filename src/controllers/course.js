@@ -5,8 +5,8 @@ const Tutor = require('../models/tutor');
 async function addCourse(req, res) {
     const { courseName, code, coursePeriod, description, studentIDs, tutorIDs } = req.body;
     const course = new Course({
-        courseName,
         code,
+        courseName, 
         coursePeriod,
         description
     });
