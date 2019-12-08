@@ -18,13 +18,13 @@ const schema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    tutorId: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Tutor'
-    }],
     studentId: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Student'
+    }],
+    tutorId: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Tutor'
     }],
     __v: {type: Number, select: false},
     createdAt: { type: Date, select: false }
