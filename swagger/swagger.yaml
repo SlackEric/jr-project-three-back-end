@@ -96,12 +96,12 @@ paths:
           description: Student object that needs to be added
           required: true
           schema:
-            $ref: '#/definitions/Student'
+            $ref: '#/definitions/StudentRequest'
       responses:
         200:
           description: Successfully add a student
           schema:
-            $ref: '#/definitions/Student'
+            $ref: '#/definitions/StudentResponse'
         400:
           description: Bad request
     get:
@@ -120,7 +120,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Student'       
+              $ref: '#/definitions/StudentResponse'       
         400:
           description: Bad request
   /students/{studentId}:        
@@ -145,7 +145,7 @@ paths:
         200:
           description: Successfully get a student
           schema:
-            $ref: '#/definitions/Student'
+            $ref: '#/definitions/StudentResponse'
         400:
           description: Bad request
         404:
@@ -172,12 +172,12 @@ paths:
           description: Student object that needs to be updated
           required: true
           schema:
-            $ref: '#/definitions/Student'
+            $ref: '#/definitions/StudentRequest'
       responses:
         200:
           description: Successfully update a student
           schema:
-            $ref: '#/definitions/Student'
+            $ref: '#/definitions/StudentResponse'
         400:
           description: Bad request
         404:
@@ -230,7 +230,7 @@ paths:
         200:
           description: The course is associated with the student
           schema:
-              $ref: '#/definitions/Student'
+              $ref: '#/definitions/StudentResponse'
         400:
           description: Bad request
         404:
@@ -280,12 +280,12 @@ paths:
           description: Tutor object to be added
           required: true
           schema:
-            $ref: '#/definitions/Tutor'
+            $ref: '#/definitions/TutorRequest'
       responses:
         200:
           description: Tutor created
           schema:
-            $ref: '#/definitions/Tutor'      
+            $ref: '#/definitions/TutorResponse'      
         400:
           description: Bad request 
     get:
@@ -302,7 +302,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Tutor'
+              $ref: '#/definitions/TutorResponse'
         400:
           description: Bad request 
   /tutors/{tutorId}:
@@ -322,14 +322,14 @@ paths:
           description: student Id
           required: true
           schema:
-            $ref: string
+            type: string
       responses:
         200:
           description: Successfully get a tutor
           schema:
             type: array
             items:
-              $ref: '#/definitions/Tutor'
+              $ref: '#/definitions/TutorResponse'
         400:
           description: Bad request 
         404:
@@ -350,12 +350,18 @@ paths:
           description: tutor Id
           required: true
           schema:
-            $ref: '#/definitions/Tutor'
+            type: string
+        - name: body
+          in: body
+          description: Tutor object to be updated
+          required: true
+          schema:
+            $ref: '#/definitions/TutorRequest'
       responses:
         200:
           description: Successfully update a tutor
           schema:
-            $ref: '#/definitions/Tutor'          
+            $ref: '#/definitions/TutorResponse'          
         400:
           description: Bad request 
         404:
@@ -404,7 +410,7 @@ paths:
         200:
           description: The course is associated with the tutor
           schema:
-            $ref: '#/definitions/Tutor'
+            $ref: '#/definitions/TutorResponse'
         400:
           description: Bad request
         404:
@@ -432,7 +438,7 @@ paths:
         200:
           description: The course is associated with the tutor
           schema:
-            $ref: '#/definitions/Tutor'
+            $ref: '#/definitions/TutorResponse'
         400:
           description: Bad request
         404:
@@ -455,7 +461,7 @@ paths:
            required: true
            schema:
             $ref: '#/definitions/Course'
-      response:
+      responses:
         200:
           description: Successfully create a course
           schema: 
@@ -572,7 +578,7 @@ definitions:
         type: string
       password:
         type: string
-  Student:
+  StudentRequest:
     type: object
     properties:
       firstName:
@@ -583,11 +589,39 @@ definitions:
         type: string
       password:
         type: string
+      dateOfBirth:
+        type: string
+      gender:
+        type: string
+      mobile:
+        type: string
+      note:
+        type: string
+      code:
+        type: string
+  StudentResponse:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+        format: email
+      dateOfBirth:
+        type: string
+      gender:
+        type: string
+      mobile:
+        type: string
+      note:
+        type: string
       courses:
-          type: array
-          items:
-            $ref: '#/definitions/Course'
-  Tutor:
+        type: array
+        items:
+          type: string
+  TutorRequest:
     type: object
     properties:
       firstName:
@@ -598,33 +632,58 @@ definitions:
         type: string
       password:
         type: string
-      title:
+      dateOfBirth:
         type: string
-      service:
+      gender:
         type: string
+      mobile:
+        type: string
+      note:
+        type: string
+      code:
+        type: string
+  TutorResponse:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      dateOfBirth:
+        type: string
+      gender:
+        type: string
+      mobile:
+        type: string
+      note:
+        type: string      
       courses:
           type: array
           items:
-            $ref: '#/definitions/Course'
+            type: string
   Course:
     type: object
     properties:
       code:
-        type: string      
+        type: string
       courseName:
         type: string
-      fee:
-        type: number
+      coursePeriod:
+        type: string
       description:
         type: string
-      tutorId:
-          type: array
-          items:
-            $ref: '#/definitions/Tutor'
       studentId:
           type: array
           items:
-            $ref: '#/definitions/Student'        
+            type: string 
+      tutorId:
+          type: array
+          items:
+            type: string  
   Token:
     type: object
     properties:
