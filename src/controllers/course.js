@@ -3,7 +3,7 @@ const Student = require('../models/student');
 const Tutor = require('../models/tutor');
 
 async function addCourse(req, res) {
-    const { courseName, code, coursePeriod, description, studentIDs, tutorIDs } = req.body;
+    const { code, courseName, coursePeriod, description, studentIDs, tutorIDs } = req.body;
     const course = new Course({
         code,
         courseName, 
