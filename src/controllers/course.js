@@ -3,11 +3,12 @@ const Student = require('../models/student');
 const Tutor = require('../models/tutor');
 
 async function addCourse(req, res) {
-    const { code, courseName, coursePeriod, description, studentIDs, tutorIDs } = req.body;
+    const { code, courseName, startDate, endDate, description, studentIDs, tutorIDs } = req.body;
     const course = new Course({
         code,
         courseName, 
-        coursePeriod,
+        startDate,
+        endDate,
         description
     });
     await course.save();

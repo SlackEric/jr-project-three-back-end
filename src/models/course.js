@@ -10,8 +10,12 @@ const schema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    coursePeriod: {
-        type: String,
+    startDate: {
+        type: Date,
+        required: true
+    },
+    endDate: {
+        type: Date,
         required: true
     },
     description: {
