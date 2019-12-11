@@ -529,6 +529,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: body
+          in: body
+          description: Course object to be updated
+          required: true
+          schema:
+            $ref: '#/definitions/Course'          
       responses:
         200:
           description: Course updated
@@ -587,10 +593,13 @@ definitions:
         type: string
       email:
         type: string
+        format: email
       password:
         type: string
+        format: password
       dateOfBirth:
         type: string
+        format: date
       gender:
         type: string
       mobile:
@@ -611,6 +620,7 @@ definitions:
         format: email
       dateOfBirth:
         type: string
+        format: date
       gender:
         type: string
       mobile:
@@ -630,10 +640,13 @@ definitions:
         type: string
       email:
         type: string
+        format: email
       password:
         type: string
+        format: password
       dateOfBirth:
         type: string
+        format: date
       gender:
         type: string
       mobile:
@@ -651,10 +664,10 @@ definitions:
         type: string
       email:
         type: string
-      password:
-        type: string
+        format: email
       dateOfBirth:
         type: string
+        format: date
       gender:
         type: string
       mobile:
@@ -673,9 +686,11 @@ definitions:
       courseName:
         type: string
       startDate:
-        type: date
+        type: string
+        format: date
       endDate:
-        type: date
+        type: string
+        format: date
       description:
         type: string
       studentId:
