@@ -512,7 +512,7 @@ paths:
           description: Bad request
         404:
           description: Course not found
-    update:
+    put:
       tags:
         - course
       summary: Update a course by code
@@ -672,8 +672,10 @@ definitions:
         type: string
       courseName:
         type: string
-      coursePeriod:
-        type: string
+      startDate:
+        type: date
+      endDate:
+        type: date
       description:
         type: string
       studentId:
