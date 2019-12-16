@@ -4,7 +4,7 @@ const Course = require('../models/course');
 
 // back-end functions to manage students from database
 async function addStudent(req, res) {
-  const { firstName, lastName, email, password, dateOfBirth, gender, mobile, note, code } = req.body;
+  const { firstName, lastName, email, password, dateOfBirth, gender, mobile, note, courses } = req.body;
   const student = new Student({
     firstName,
     lastName,
@@ -17,30 +17,36 @@ async function addStudent(req, res) {
 
   await student.save();
 
-  const role = 'student';
-  const user = new User({
-    email,
-    password,
-    role
-  });
+  if (password) {
+    const role = 'student';
+    const user = new User({
+      email,
+      password,
+      role
+    });
 
-  await user.hashPassword();
-  await user.save();
+    await user.hashPassword();
+    await user.save();
+  }
 
   // add course code to new student
-  if (code) {
+  if (courses) {
     const addedStudent = await Student.findOne({ email })
-    const course = await Course.findById(code);
 
-    if (!addedStudent || !course) {
-      return res.status(404).json('student or course not found')
-    }
-
-    addedStudent.courses.addToSet(course._id);
-    course.studentId.addToSet(addedStudent._id);
-
-    await addedStudent.save();
-    await course.save();
+    async function asyncEachCourseCode(array) {
+      for (let index = 0; index < array.length; index++) {
+        const element = array[index];
+        const course = await Course.findById({ _id: element });
+        await addedStudent.courses.addToSet(course._id);
+        await addedStudent.save();
+        await course.studentId.addToSet(addedStudent._id);
+        await course.save();
+      };
+    };
+    addCourseCodes = async () => {
+      await asyncEachCourseCode(courses);
+    };
+    await addCourseCodes();
 
     return res.json(addedStudent);
   }
@@ -103,8 +109,10 @@ async function deleteStudent(req, res) {
   }
 
   const course = await Course.findOne({ studentId: id });
-  course.studentId.pull(student._id);
-  await course.save();
+  if (course) {
+    course.studentId.pull(student._id);
+    await course.save();
+  }
 
   return res.sendStatus(200);
 }
