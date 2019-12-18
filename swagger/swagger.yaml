@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-host: https://jr-project-three-back-end.herokuapp.com
+host: jr-project-three-back-end.herokuapp.com
 basePath: /api/v1
 tags:
 tags:
@@ -73,10 +73,12 @@ paths:
           description: Admin object that needs to be added
           required: true
           schema:
-            $ref: '#/definitions/Admin'
+            $ref: '#/definitions/AdminRequest'
       responses:
         200:
-          description: Successfully add an admin       
+          description: Successfully add an admin
+          schema:
+            $ref: '#/definitions/User'    
         400:
           description: Bad request
   /students:
@@ -577,7 +579,7 @@ definitions:
         type: string
       password:
         type: string
-  Admin: 
+  AdminRequest: 
     type: object
     properties:
       email: 
@@ -606,8 +608,10 @@ definitions:
         type: string
       note:
         type: string
-      code:
-        type: string
+      courses:
+        type: array
+        items:
+          type: string
   StudentResponse:
     type: object
     properties:
@@ -653,8 +657,10 @@ definitions:
         type: string
       note:
         type: string
-      code:
-        type: string
+      courses:
+          type: array
+          items:
+            type: string
   TutorResponse:
     type: object
     properties:
@@ -693,11 +699,11 @@ definitions:
         format: date
       description:
         type: string
-      studentId:
+      studentIDs:
           type: array
           items:
             type: string 
-      tutorId:
+      tutorIDs:
           type: array
           items:
             type: string  
