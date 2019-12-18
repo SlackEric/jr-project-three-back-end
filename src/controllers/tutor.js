@@ -104,13 +104,15 @@ async function deleteTutor(req, res) {
         return res.status(404).json('Tutor not found');
     }
 
-    const course = await Course.findOne({ tutorId: id });
-    if (course) {
-        course.tutorId.pull(tutor._id);
-        await course.save();
-    }
+    const courses = await Course.find({ tutorId: id });
+    if (courses) {
+        courses.forEach(course => {
+            course.tutorId.pull(id);
+            course.save();
+        });
+    };
     return res.sendStatus(200);
-}
+};
 
 async function addCourse(req, res) {
     const { id, code } = req.params;

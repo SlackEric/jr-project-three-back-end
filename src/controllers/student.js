@@ -108,12 +108,13 @@ async function deleteStudent(req, res) {
     return res.status(404).json('student not found');
   }
 
-  const course = await Course.findOne({ studentId: id });
-  if (course) {
-    course.studentId.pull(student._id);
-    await course.save();
+  const courses = await Course.find({ studentId: id });
+  if (courses) {
+    courses.forEach(course => {
+      course.studentId.pull(id);
+      course.save();
+    });
   }
-
   return res.sendStatus(200);
 }
 
