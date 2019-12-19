@@ -2,7 +2,7 @@ const express = require('express');
 const {
     addStudent,
     getAllStudent,
-    getStudent,
+    getStudentsByName,
     updateStudent,
     deleteStudent,
     addCourse,
@@ -12,7 +12,7 @@ const {
 const router = express.Router();
 
 router.get('/', getAllStudent);
-router.get('/:id', getStudent);
+router.get('/:name', getStudentsByName);
 router.post('/', addStudent);
 router.put('/:id', updateStudent);
 router.delete('/:id', deleteStudent);
