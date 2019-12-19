@@ -54,16 +54,31 @@ async function addStudent(req, res) {
   return res.json(student);
 }
 
-async function getStudent(req, res) {
-  const { id } = req.params;
+async function getStudentsByName(req, res) {
+  const { name } = req.params;
 
-  const student = await Student.findById(id).populate('courses', 'courseName');
+  const regex = /^([A-Za-z]+)(\s+([A-Za-z]+))*$/;
+  const match = regex.exec(name);
 
-  //error message not showing correctly if id is missing one digit
-  if (!student) {
-    return res.status(404).json('Student not found');
+  const paramFirstWord = match[1];
+  const paramSecondWord = match[3];
+
+  let students = [];
+
+  if (typeof paramSecondWord !== "undefined") {
+    /*
+      When there are two words, it means it provides both first name and last name.
+    */
+    students = await Student.find({firstName: paramFirstWord, lastName: paramSecondWord});
+  } else {
+    /*
+      When there is only one word provided, that could be either the first name or last name,
+      so we need to search it as a first name and as a last name.
+    */
+    students = await Student.find({$or:[{firstName: paramFirstWord}, {lastName: paramFirstWord}]});
   }
-  return res.json(student);
+
+  return res.json(students);
 }
 
 async function getAllStudent(req, res) {
@@ -157,7 +172,7 @@ async function deleteCourse(req, res) {
 module.exports = {
   addStudent,
   getAllStudent,
-  getStudent,
+  getStudentsByName,
   updateStudent,
   deleteStudent,
   addCourse,
