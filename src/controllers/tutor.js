@@ -8,7 +8,7 @@ async function addTutor(req, res) {
     firstName,
     lastName,
     email,
-    password,
+    tmpPassword,
     dateOfBirth,
     gender,
     mobile,
@@ -27,7 +27,9 @@ async function addTutor(req, res) {
 
   await tutor.save();
 
-  if (!password) {
+  let password = tmpPassword;
+  
+  if (!tmpPassword) {
     password = generator.generate({
       length: 10,
       numbers: true
