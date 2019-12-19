@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const Student = require('../models/student');
 const Course = require('../models/course');
+const generator = require('generate-password');
 
 // back-end functions to manage students from database
 async function addStudent(req, res) {
@@ -17,17 +18,24 @@ async function addStudent(req, res) {
 
   await student.save();
 
-  if (password) {
-    const role = 'student';
-    const user = new User({
-      email,
-      password,
-      role
+  if (!password) {
+    password = generator.generate({
+      length: 10,
+      numbers: true
     });
-
-    await user.hashPassword();
-    await user.save();
   }
+
+  const role = 'student';
+  const user = new User({
+    email,
+    password,
+    role
+  });
+
+  console.log(user);
+
+  await user.hashPassword();
+  await user.save();
 
   // add course code to new student
   if (courses) {
