@@ -1,10 +1,11 @@
 const User = require('../models/user');
 const Student = require('../models/student');
 const Course = require('../models/course');
+const generator = require('generate-password');
 
 // back-end functions to manage students from database
 async function addStudent(req, res) {
-  const { firstName, lastName, email, password, dateOfBirth, gender, mobile, note, courses } = req.body;
+  const { firstName, lastName, email, tmpPassword, dateOfBirth, gender, mobile, note, courses } = req.body;
   const student = new Student({
     firstName,
     lastName,
@@ -17,17 +18,24 @@ async function addStudent(req, res) {
 
   await student.save();
 
-  if (password) {
-    const role = 'student';
-    const user = new User({
-      email,
-      password,
-      role
-    });
+  let password = tmpPassword;
 
-    await user.hashPassword();
-    await user.save();
+  if (!tmpPassword) {
+    password = generator.generate({
+      length: 10,
+      numbers: true
+    });
   }
+
+  const role = 'student';
+  const user = new User({
+    email,
+    password,
+    role
+  });
+
+  await user.hashPassword();
+  await user.save();
 
   // add course code to new student
   if (courses) {
@@ -69,13 +77,13 @@ async function getStudentsByName(req, res) {
     /*
       When there are two words, it means it provides both first name and last name.
     */
-    students = await Student.find({firstName: paramFirstWord, lastName: paramSecondWord});
+    students = await Student.find({ firstName: paramFirstWord, lastName: paramSecondWord });
   } else {
     /*
       When there is only one word provided, that could be either the first name or last name,
       so we need to search it as a first name and as a last name.
     */
-    students = await Student.find({$or:[{firstName: paramFirstWord}, {lastName: paramFirstWord}]});
+    students = await Student.find({ $or: [{ firstName: paramFirstWord }, { lastName: paramFirstWord }] });
   }
 
   return res.json(students);

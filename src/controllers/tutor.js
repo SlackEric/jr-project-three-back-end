@@ -1,13 +1,14 @@
 const User = require("../models/user");
 const Tutor = require("../models/tutor");
 const Course = require("../models/course");
+const generator = require('generate-password');
 
 async function addTutor(req, res) {
   const {
     firstName,
     lastName,
     email,
-    password,
+    tmpPassword,
     dateOfBirth,
     gender,
     mobile,
@@ -26,16 +27,23 @@ async function addTutor(req, res) {
 
   await tutor.save();
 
-  if (password) {
-    const role = "tutor";
-    const user = new User({
-      email,
-      password,
-      role
+  let password = tmpPassword;
+  
+  if (!tmpPassword) {
+    password = generator.generate({
+      length: 10,
+      numbers: true
     });
-    await user.hashPassword();
-    await user.save();
   }
+
+  const role = "tutor";
+  const user = new User({
+    email,
+    password,
+    role
+  });
+  await user.hashPassword();
+  await user.save();
 
   if (courses) {
     // add course code to new tutor
