@@ -125,21 +125,21 @@ paths:
               $ref: '#/definitions/StudentResponse'       
         400:
           description: Bad request
-  /students/{studentId}:        
+  /students/{name}:        
     get:
       tags:
         - student
-      summary: Get a student by Id
+      summary: Get students by name
       description: ''
-      operationId: getStudent
+      operationId: getStudentsByName
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
-        - name: studentId
+        - name: name
           in: path
-          description: student id
+          description: student name
           required: true
           schema:
             type: string      
@@ -150,8 +150,7 @@ paths:
             $ref: '#/definitions/StudentResponse'
         400:
           description: Bad request
-        404:
-          description: Student not found
+  /students/{id}:     
     put:
       tags:
         - student
@@ -307,21 +306,21 @@ paths:
               $ref: '#/definitions/TutorResponse'
         400:
           description: Bad request 
-  /tutors/{tutorId}:
+  /tutors/{name}:
     get:
       tags: 
         - tutor
-      summary: Get a tutor by Id
+      summary: Get tutors by name
       description: ''
-      operationId: getTutor
+      operationId: getTutorsByName
       consumes:
         - application/json
       produces:
         - application/json      
       parameters:
-        - name: tutorId
+        - name: name
           in: path
-          description: student Id
+          description: tutor name
           required: true
           schema:
             type: string
@@ -333,9 +332,8 @@ paths:
             items:
               $ref: '#/definitions/TutorResponse'
         400:
-          description: Bad request 
-        404:
-          description: Tutor not found
+          description: Bad request
+  /tutors/{id}:       
     put:
       tags: 
         - tutor
@@ -401,7 +399,7 @@ paths:
           description: tutor Id
           required: true
           schema:
-            $ref: string
+            type: string
         - name: code
           in: path
           description: course code
