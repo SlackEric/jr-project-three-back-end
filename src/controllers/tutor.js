@@ -74,6 +74,18 @@ async function getAllTutor(req, res) {
   return res.json(tutors);
 }
 
+async function getTutorById(req, res) {
+    const { id } = req.params;
+  
+    const tutor = await Tutor.findById(id);
+  
+    //error message not showing correctly if id is missing one digit
+    if (!tutor) {
+      return res.status(404).json('Tutor not found');
+    }
+    return res.json(tutor);
+  }
+
 async function getTutorsByName(req, res) {
   const { name } = req.params;
 
@@ -196,6 +208,7 @@ async function deleteCourse(req, res) {
 module.exports = {
   addTutor,
   getAllTutor,
+  getTutorById,
   getTutorsByName,
   updateTutor,
   deleteTutor,
