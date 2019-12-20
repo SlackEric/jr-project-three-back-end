@@ -31,7 +31,7 @@ async function addStudent(req, res) {
     password,
     role
   });
-console.log(user);
+
   await user.hashPassword();
   await user.save();
 
