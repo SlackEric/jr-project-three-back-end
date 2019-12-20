@@ -5,7 +5,7 @@ const generator = require('generate-password');
 
 // back-end functions to manage students from database
 async function addStudent(req, res) {
-  const { firstName, lastName, email, tmpPassword, dateOfBirth, gender, mobile, note, courses } = req.body;
+  let { firstName, lastName, email, password, dateOfBirth, gender, mobile, note, courses } = req.body;
   const student = new Student({
     firstName,
     lastName,
@@ -18,9 +18,7 @@ async function addStudent(req, res) {
 
   await student.save();
 
-  let password = tmpPassword;
-
-  if (!tmpPassword) {
+  if (!password) {
     password = generator.generate({
       length: 10,
       numbers: true
@@ -33,7 +31,7 @@ async function addStudent(req, res) {
     password,
     role
   });
-
+console.log(user);
   await user.hashPassword();
   await user.save();
 
