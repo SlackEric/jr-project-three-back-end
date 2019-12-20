@@ -60,6 +60,24 @@ async function addStudent(req, res) {
   return res.json(student);
 }
 
+async function getStudentById(req, res) {
+  const { id } = req.params;
+
+  const student = await Student.findById(id);
+
+  //error message not showing correctly if id is missing one digit
+  if (!student) {
+    return res.status(404).json('Student not found');
+  }
+  return res.json(student);
+}
+
+async function getAllStudent(req, res) {
+  const students = await Student.find();
+  return res.json(students);
+}
+
+
 async function getStudentsByName(req, res) {
   const { name } = req.params;
 
@@ -179,6 +197,7 @@ module.exports = {
   addStudent,
   getAllStudent,
   getStudentsByName,
+  getStudentById,
   updateStudent,
   deleteStudent,
   addCourse,

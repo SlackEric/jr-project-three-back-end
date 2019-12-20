@@ -3,6 +3,7 @@ const express = require('express');
 const {
     addTutor,
     getAllTutor,
+    getTutorById,
     getTutorsByName,
     updateTutor,
     deleteTutor,
@@ -14,6 +15,7 @@ const router = express.Router();
 
 router.get('/', getAllTutor);
 router.get('/:name', getTutorsByName);
+router.get('/:id', getTutorById);
 router.post('/', addTutor);
 router.put('/:id', updateTutor);
 router.delete('/:id', deleteTutor);
